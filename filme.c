@@ -1,6 +1,25 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+
 #include "filme.h"
+
+// Gera o ponteiro
+TMovie *inicializa() {
+  return NULL;
+}
+
+// Aloca o espaço na memória e preenche o objeto
+TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int duracao) {
+  TMovie *novo = (TMovie *) malloc(sizeof(TMovie));
+  strcpy(novo->titulo, titulo);
+  novo->ano = ano;
+  strcpy(novo->diretor, diretor);
+  strcpy(novo->genero, genero);
+  novo->duracao = duracao;
+  printf("Nome: %s\n", novo->titulo);
+
+}
 
 void imprime_info(TMovie *filme){
   printf("Titulo: %s \n", filme->titulo);
