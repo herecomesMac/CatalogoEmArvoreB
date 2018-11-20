@@ -25,7 +25,7 @@ TNo *cria_no(char *nomedoarquivo) {
   char c = fgetc(arq);
   while(c != '/'){
     novo->movie->titulo[cont] = c;
-    c = fgetc(arq);7
+    c = fgetc(arq);
     cont++;
   }
   cont = 0;
