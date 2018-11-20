@@ -34,7 +34,7 @@ TNo *busca_por_diretor(char*);
 
 //TO-DO
 // insere um nó na árvore
-void insere_no(TNo*);
+void insere_no(TNo*, TNo*);
 
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore

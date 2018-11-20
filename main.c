@@ -3,7 +3,7 @@
 #include<string.h>
 #include "arvore.h"
 
-TNo *cria_no(char *nomedoarquivo) {
+TNo *monta_biblioteca(char *nomedoarquivo) {
   printf("Lendo arquivo... \n");
 
   //Abre o arquivo e trata caso dê erro
@@ -14,7 +14,7 @@ TNo *cria_no(char *nomedoarquivo) {
   }
   printf("Arquivo lido!\n");
 
-  //Lê o arquivo linha a linha e gera
+  //Lê o arquivo linha a linha
   printf("Gerando a biblioteca...\n");
   size_t buffer_size = sizeof(TMovie);
   char* buffer = (char *)malloc(buffer_size);
@@ -23,60 +23,30 @@ TNo *cria_no(char *nomedoarquivo) {
     exit(1);
   } //declarando o tamanho da linha separado porque deu ruim
   size_t tam_linha;
-  while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
-    cria_da_linha(buffer);
-  }
+  int count = 0;
+  TNo *arv = inicializa_no();
 
-  // int cont = 0;
-  // TNo *novo = (TNo *) malloc(sizeof(TNo));
-  // char *linha = fgetc(arq);
-  // printf("char: %s\n", );
-  // while(c != '/'){
-  //   novo->movie->titulo[cont] = c;
-  //   c = fgetc(arq);
-  //   cont++;
-  // }
-//   cont = 0;
-//   char ano = fgetc(arq);
-//   char anocompleto[4];
-//   while(ano != '/'){
-//     anocompleto[cont] = ano;
-//     ano = fgetc(arq);
-//     cont++;
-//   }
-//   novo->movie->ano = atoi(anocompleto);
-//   cont = 0;
-//   c = fgetc(arq);
-//   while(c != '/'){
-//     novo->movie->diretor[cont] = c;
-//     c =fgetc(arq);
-//     cont++;
-//   }
-//   cont = 0;
-//   c = fgetc(arq);
-//   while(c != '/'){
-//     novo->movie->genero[cont] = c;
-//     c = fgetc(arq);
-//     cont++;
-//   }
-//   cont = 0;
-//   char dur = fgetc(arq);
-//   char duracao[4];
-//   while(dur != '\n'){
-//     duracao[cont] = dur;
-//     dur = fgetc(arq);
-//     cont++;
-//   }
-//   novo->movie->duracao = atoi(duracao);
-//
-//   imprime_info(novo->movie);
-//   fclose(arq);
-// return novo;
+  // para cada linha, crio um nó e insiro na árvore
+  while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
+    TNo *novo = cria_da_linha(buffer);
+    insere_no(arv, novo);
+    count++;
+  }
+  printf("Tudo pronto! Sua biblioteca tem %d títulos no momento.\n", count);
+  fclose(arq);
+return arv;
+}
+
+// Aqui roda a parte "UI" do programa, que interage com o usuário
+void execucao() {
+  printf("Hello, I'm working! \n");
+  return;
 }
 
 
 int main(){
   TNo *raiz = inicializa_no();
-  raiz = cria_no("filmes.txt");
+  raiz = monta_biblioteca("filmes.txt");
+  execucao();
   return 0;
 }

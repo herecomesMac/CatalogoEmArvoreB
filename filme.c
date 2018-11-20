@@ -17,8 +17,8 @@ TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int durac
   strcpy(novo->diretor, diretor);
   strcpy(novo->genero, genero);
   novo->duracao = duracao;
-  printf("Nome: %s\n", novo->titulo);
 
+  return novo;
 }
 
 void imprime_info(TMovie *filme){
