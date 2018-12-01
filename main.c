@@ -3,13 +3,13 @@
 #include<string.h>
 #include "arvore.h"
 
-TNo *monta_biblioteca(char *nomedoarquivo) {
+TNo *monta_biblioteca(char *nomedoarquivo,int d) {
   printf("Lendo arquivo... \n");
 
   //Abre o arquivo e trata caso dê erro
   FILE *arq = fopen(nomedoarquivo, "r");
   if(!arq){
-    printf("Não foi possível abrir o arquivo!\n");
+    printf("Nao foi possível abrir o arquivo!\n");
     exit(1);
   }
   printf("Arquivo lido!\n");
@@ -24,7 +24,7 @@ TNo *monta_biblioteca(char *nomedoarquivo) {
   } //declarando o tamanho da linha separado porque deu ruim
   size_t tam_linha;
   int count = 0;
-  TNo *arv = inicializa_no();
+  TNo *arv = inicializa_no(d);
 
   // para cada linha, crio um nó e insiro na árvore
   while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
@@ -32,7 +32,7 @@ TNo *monta_biblioteca(char *nomedoarquivo) {
     insere_no(arv, novo);
     count++;
   }
-  printf("Tudo pronto! Sua biblioteca tem %d títulos no momento.\n", count);
+  printf("Tudo pronto! Sua biblioteca tem %d titulos no momento.\n", count);
   fclose(arq);
 return arv;
 }
@@ -45,8 +45,11 @@ void execucao() {
 
 
 int main(){
-  TNo *raiz = inicializa_no();
-  raiz = monta_biblioteca("filmes.txt");
+  int d;
+  printf("Entre coma ordem da arvore: ");
+  scanf("%i", &d);
+  TNo *raiz = inicializa_no(d);
+  raiz = monta_biblioteca("filmes.txt", d);
   execucao();
   return 0;
 }

@@ -24,5 +24,7 @@ void imprime_info(TMovie*);
 // Recebe um ponteiro para o primeiro nó da fila e imprime todos usando o imprime_info
 void imprime_fila(TMovie*);
 
+//Tamanho do struct do Filme
+int tamanho_filme();
 
 #endif // FILME_H

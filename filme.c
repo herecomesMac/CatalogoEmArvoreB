@@ -9,6 +9,14 @@ TMovie *inicializa() {
   return NULL;
 }
 
+int tamanho_filme(){
+  return sizeof(char[80]) +
+    sizeof(int) +
+    sizeof(char[50]) +
+    sizeof(char[30]) +
+    sizeof(int);
+}
+
 // Aloca o espaço na memória e preenche o objeto
 TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int duracao) {
   TMovie *novo = (TMovie *) malloc(sizeof(TMovie));
