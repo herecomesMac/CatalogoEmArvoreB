@@ -14,7 +14,7 @@ typedef struct No{
 }TNo;
 
 // Gera um ponteiro, apenas
-TNo *inicializa_no();
+TNo *cria_no(int);
 
 //Faz a mesma coisa que os strsep, porém como não funcionou, fiz uma função própria.
 char* mystrsep(char** stringp, const char* delim);
@@ -31,10 +31,10 @@ TNo *cria_do_input(char*);
 int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encontrou);
 
 //Le o no
-No *le_no(FILE *in);
+TNo *le_no(FILE *in);
 
 //Libera no
-void libera_no(No *no);
+void libera_no(TNo *no, int o);
 
 // TO-DO
 // Percorre todos os nós da árvore a partir do primeiro e retorna uma fila de nós
@@ -43,14 +43,14 @@ TNo *busca_por_diretor(char*);
 
 //TO-DO
 // insere um nó na árvore
-void insere_no(TNo*, TNo*);
+void insere_no(TNo*, TNo*, int);
 
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore
 TNo *remove_no(char*);
 
 //Tamanho do Nó para fazer fseek mais fácil
-int tamanho_No(int D);
+int tamanho_No(int);
 
 
 #endif
