@@ -6,11 +6,11 @@
 #include "filme.h"
 
 typedef struct No{
-  TMovie *movie;
-  int quantaschaves; //quantidades de chaves no nó
-  struct No *ponteiro_pai; //ponteiro para o pai
-  int *arraydechaves; //array de chaves
-  struct No **filhos; //ponteiro para o array de ponteiros
+  int n_chaves; // quantidades de chaves no nó
+  int end_pai; // ponteiro para o pai
+  int *array_chaves; // array de chaves
+  int *end_filhos; // array de endereço dos filhos
+  TMovie **filmes; // dados dos filhos
 }TNo;
 
 // Gera um ponteiro, apenas
