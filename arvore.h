@@ -27,9 +27,14 @@ TNo *cria_da_linha(char*);
 // recebe um input do usuario e cria um no com ele
 TNo *cria_do_input(char*);
 
-//TO-DO
 // Busca um nó pela sua chave primária
 int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encontrou);
+
+//Le o no
+No *le_no(FILE *in);
+
+//Libera no
+void libera_no(No *no);
 
 // TO-DO
 // Percorre todos os nós da árvore a partir do primeiro e retorna uma fila de nós

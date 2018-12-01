@@ -12,6 +12,49 @@ int tamanho_No(int D){
     tamanho_filme() * (2 * D); // filmes
 }
 
+void libera_no(No *no) {
+    int i;
+    for (i = 0; i < 2 * D; i++) {
+        free(no->filmes[i]);
+    }
+    free(no->filmes);
+    free(no->p);
+    no->filmes = NULL;
+    no->p = NULL;
+    free(no);
+}
+
+No *le_no(FILE *in) {
+    int i;
+    No *no = (No *) malloc(sizeof(No));
+    if (0 >= fread(&no->m, sizeof(int), 1, in)) {
+        free(no);
+        return NULL;
+    }
+    fread(&no->pont_pai, sizeof(int), 1, in);
+    no->p = (int *) malloc(sizeof(int) * (2 * D + 1));
+    no->filmes = (Filme **) malloc(sizeof(Filme *) * 2 * D);
+
+    fread(&no->p[0], sizeof(int), 1, in);
+    for (i = 0; i < no->m; i++) {
+        no->filmes[i] = le_filme(in);
+        fread(&no->p[i + 1], sizeof(int), 1, in);
+    }
+
+    // Termina de ler dados nulos para resolver problema do cursor
+    // Dados lidos sao descartados
+    Filme *vazio;
+    int nul = -1;
+    for (i = no->m; i < 2 * D; i++) {
+        no->filmes[i] = NULL;
+        vazio = le_filme(in);
+        fread(&no->p[i + 1], sizeof(int), 1, in);
+        free(vazio);
+    }
+    libera_no(no);
+    return no;
+}
+
 int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encontrou){
     Metadados *temp = le_metadados(meta);
     *pont = temp->pont_raiz;
@@ -65,7 +108,7 @@ int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encont
         }
     }
 
-    libera_no(no);
+
     return pos;
 }
 
