@@ -12,7 +12,7 @@ int tamanho_No(int D){
     tamanho_filme() * (2 * D); // filmes
 }
 
-void libera_no(No *no) {
+void libera_no(TNo *no) {
     int i;
     for (i = 0; i < 2 * D; i++) {
         free(no->filmes[i]);
@@ -26,7 +26,7 @@ void libera_no(No *no) {
 
 No *le_no(FILE *in) {
     int i;
-    No *no = (No *) malloc(sizeof(No));
+    TNo *no = (TNo *) malloc(sizeof(TNo));
     if (0 >= fread(&no->m, sizeof(int), 1, in)) {
         free(no);
         return NULL;
@@ -62,7 +62,7 @@ int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encont
     fseek(dados, temp->pont_raiz, SEEK_SET);
     int atual = temp->pont_raiz;
     free(temp);
-    No *no = le_no(dados);
+    TNo *no = le_no(dados);
 
     int reset = 0;
     int pos = 0;
@@ -108,7 +108,7 @@ int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encont
         }
     }
 
-
+    libera_no(no);
     return pos;
 }
 
