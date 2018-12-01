@@ -17,6 +17,37 @@ int tamanho_filme(){
     sizeof(int);
 }
 
+// Cria de verdade um nó e preenche, recebe a linha lida como input
+TMovie *cria_da_linha(char *linha) {
+  char *titulo, *diretor, *genero;
+  int ano, duracao;
+
+  // separando a string e preenchendo as variáveis com os valores
+  char* palavra;
+  for (size_t i = 0; i < 5; i++) {
+    palavra = mystrsep(&linha, "/");
+    switch (i) {
+      case 0:
+        titulo = palavra;
+        break;
+      case 1:
+        ano = atoi(palavra);
+        break;
+      case 2:
+        diretor = palavra;
+        break;
+      case 3:
+        genero = palavra;
+        break;
+      case 4:
+        duracao = atoi(palavra);
+        break;
+    }
+    TMovie *novo = cria_filme(titulo, ano, diretor, genero, duracao);
+    imprime_info(novo);
+  }
+}
+
 // Aloca o espaço na memória e preenche o objeto
 TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int duracao) {
   TMovie *novo = (TMovie *) malloc(sizeof(TMovie));
@@ -31,8 +62,23 @@ TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int durac
 
 void imprime_info(TMovie *filme){
   printf("Titulo: %s \n", filme->titulo);
+  printf("Chave: %s \n", filme->chave);
   printf("---Ano de Lancamento: %i \n", filme->ano);
   printf("---Diretor: %s \n", filme->diretor);
   printf("---Genero: %s \n", filme->genero);
   printf("---Duracao: %i \n",filme->duracao);
+}
+
+char* mystrsep(char** stringp, const char* delim) {
+  char* start = *stringp;
+  char* p;
+
+  p = (start != NULL) ? strpbrk(start, delim) : NULL;
+  if (p == NULL) { *stringp = NULL; }
+  else {
+    *p = '\0';
+    *stringp = p + 1;
+  }
+
+  return start;
 }

@@ -15,6 +15,13 @@ typedef struct filme{
 // Gera o ponteiro
 TMovie *inicializa();
 
+//Faz a mesma coisa que os strsep, porém como não funcionou, fiz uma função própria.
+char* mystrsep(char** stringp, const char* delim);
+
+//TO-DO
+// Cria de verdade um nó e preenche, recebe a linha lida como input
+TMovie *cria_da_linha(char*);
+
 // Aloca o espaço na memória e preenche o objeto
 TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int duracao);
 

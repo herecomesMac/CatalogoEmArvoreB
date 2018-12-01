@@ -125,61 +125,6 @@ void libera_no(TNo *no, int o) {
 //     return pos;
 // }
 
-
-// TO-DO: criar o resto das variáveis!
-// Cria de verdade um nó e preenche, recebe a linha lida como input
-TNo *cria_da_linha(char *linha) {
-  char *titulo, *diretor, *genero;
-  int ano, duracao;
-  TNo *novo = (TNo *)malloc(sizeof(TNo));
-
-  char* mystrsep(char** stringp, const char* delim){
-
-    char* start = *stringp;
-    char* p;
-
-    p = (start != NULL) ? strpbrk(start, delim) : NULL;
-
-    if (p == NULL)
-    {
-      *stringp = NULL;
-    }
-    else
-    {
-      *p = '\0';
-      *stringp = p + 1;
-    }
-
-    return start;
-}
-
-  // separando a string e preenchendo as variáveis com os valores
-  char* palavra;
-  for (size_t i = 0; i < 5; i++) {
-    palavra = mystrsep(&linha, "/");
-    switch (i) {
-      case 0:
-        titulo = palavra;
-        break;
-
-      case 1:
-        ano = atoi(palavra);
-        break;
-
-      case 2:
-        diretor = palavra;
-        break;
-
-      case 3:
-        genero = palavra;
-        break;
-
-      case 4:
-        duracao = atoi(palavra);
-        break;
-    }
-  }
-
   TMovie *filme = cria_filme(titulo, ano, diretor, genero, duracao);
   // novo->movie = filme;
   // novo->quantaschaves= 0;

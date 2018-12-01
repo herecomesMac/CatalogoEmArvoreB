@@ -19,13 +19,6 @@ TNo *cria_no(int);
 //Tamanho do Nó para fazer fseek mais fácil
 int tamanho_No(int);
 
-//Faz a mesma coisa que os strsep, porém como não funcionou, fiz uma função própria.
-char* mystrsep(char** stringp, const char* delim);
-
-//TO-DO
-// Cria de verdade um nó e preenche, recebe a linha lida como input
-TNo *cria_da_linha(char*);
-
 //TO-DO
 // recebe um input do usuario e cria um no com ele
 TNo *cria_do_input(char*);
