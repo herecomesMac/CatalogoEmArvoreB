@@ -5,8 +5,21 @@
 #include "arvore.h"
 #include "filme.h"
 
+/* typedef struct No{
+  int n_chaves; // quantidades de chaves no nó
+  int end_pai; // ponteiro para o pai
+  int *array_chaves; // array de chaves
+  int *end_filhos; // array de endereço dos filhos
+  TMovie **filmes; // dados dos filhos
+}TNo; */
+
 TNo *cria_no(int o) {
-  
+  TNo *no = (TNo *) malloc(sizeof(TNo));
+  no->n_chaves = 0;
+  no->end_pai = -1;
+  no->array_chaves = (int *) malloc(sizeof(int) * (2*o));
+  no->end_filhos = (int *) malloc(sizeof(int) * (2*o+1));
+  no->filmes = (TMovie **) malloc(sizeof(TMovie *) * (2*o+1));
 }
 
 // checada

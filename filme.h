@@ -4,6 +4,7 @@
 #include<stdio.h>
 
 typedef struct filme{
+  char chave[85];
   char titulo[80]; //titulo do filme
   int ano; //ano de lançamento
   char diretor[50]; //nome do diretor
@@ -20,11 +21,15 @@ TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int durac
 // Imprime info do nó
 void imprime_info(TMovie*);
 
+//Tamanho do struct do Filme
+int tamanho_filme();
+
 //TO-DO
 // Recebe um ponteiro para o primeiro nó da fila e imprime todos usando o imprime_info
 void imprime_fila(TMovie*);
 
-//Tamanho do struct do Filme
-int tamanho_filme();
+// TO-DO
+// recebe o ano e o diretor e gera uma chave
+char *gera_chave(char*, char*);
 
 #endif // FILME_H

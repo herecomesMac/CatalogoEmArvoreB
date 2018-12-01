@@ -3,7 +3,7 @@
 #include<string.h>
 #include "arvore.h"
 
-TNo *monta_biblioteca(char *arq_nome, int o) {
+int monta_biblioteca(char *arq_nome, int o) {
   printf("Lendo arquivo... \n");
 
   //Abre o arquivo e trata caso dê erro
@@ -34,7 +34,7 @@ TNo *monta_biblioteca(char *arq_nome, int o) {
   }
   printf("Tudo pronto! Sua biblioteca tem %d titulos no momento.\n", count);
   fclose(arq);
-return arv;
+return 0;
 }
 
 // Aqui roda a parte "UI" do programa, que interage com o usuário
@@ -43,13 +43,20 @@ void execucao() {
   return;
 }
 
-
 int main(){
+  // pegando os dados iniciais
   int ordem;
+  char *arq_dados;
   printf("Insira a ordem da árvore: ");
   scanf("%i", &ordem);
-  TNo *raiz = cria_no(ordem);
-  // raiz = monta_biblioteca("filmes.txt", d);
+  // printf("Insira o nome do arquivo de dados: ");
+  // scanf("%s", arq_dados);
+
+  // monto a árvore inicial com os dados e retorno 0 se teve sucesso
+  int falha = monta_biblioteca("filmes.txt", ordem);
+  if(falha != 0) exit(-1);
+
+  // Rodo a interface de usuário para interagir com a biblioteca
   // execucao();
   return 0;
 }

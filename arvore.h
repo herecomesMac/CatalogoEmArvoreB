@@ -13,8 +13,11 @@ typedef struct No{
   TMovie **filmes; // dados dos filhos
 }TNo;
 
-// Gera um ponteiro, apenas
+// Gera um nó sem dados
 TNo *cria_no(int);
+
+//Tamanho do Nó para fazer fseek mais fácil
+int tamanho_No(int);
 
 //Faz a mesma coisa que os strsep, porém como não funcionou, fiz uma função própria.
 char* mystrsep(char** stringp, const char* delim);
@@ -48,9 +51,5 @@ void insere_no(TNo*, TNo*, int);
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore
 TNo *remove_no(char*);
-
-//Tamanho do Nó para fazer fseek mais fácil
-int tamanho_No(int);
-
 
 #endif
