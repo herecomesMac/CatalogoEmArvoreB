@@ -46,7 +46,7 @@ void execucao() {
 
 int main(){
   int d;
-  printf("Entre coma ordem da arvore: ");
+  printf("Insira a ordem da árvore: ");
   scanf("%i", &d);
   TNo *raiz = inicializa_no(d);
   raiz = monta_biblioteca("filmes.txt", d);
