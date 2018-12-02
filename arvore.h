@@ -4,10 +4,12 @@
 #include<stdio.h>
 #include<string.h>
 #include "filme.h"
+#include "index.h"
 
 typedef struct No{
   int n_chaves; // quantidades de chaves no nó
   int end_pai; // ponteiro para o pai
+  char **array_chaves; // array de chaves
   int *end_filhos; // array de endereço dos filhos
   TMovie **filmes; // dados dos filhos
 }TNo;
@@ -23,10 +25,10 @@ int tamanho_No(int);
 TNo *cria_do_input(char*);
 
 // Busca um nó pela sua chave primária
-int busca(char *titulo, int ano, FILE *meta, FILE *dados, int *pont, int *encontrou);
+int busca(char *chave, Index *index, int pos);
 
 //Le o no
-TNo *le_no(FILE *in);
+TNo *le_no(Index *index, int pos);
 
 //Libera no
 void libera_no(TNo *no, int o);
@@ -38,7 +40,7 @@ TNo *busca_por_diretor(char*);
 
 //TO-DO
 // insere um nó na árvore
-void insere_no(TNo*, TNo*, int);
+int insere_filme(Index *index, TMovie *filme);
 
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore
