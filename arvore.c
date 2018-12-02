@@ -88,7 +88,7 @@ int insere_filme(Index *index, TMovie *filme) {
   TNo *no = le_no(index, pos_no);
   // se a chave já está no nó, retorna erro
   for(int i=0; i < no->n_chaves; i++) {
-    if(no->filmes[i]->chave == filme->chave) {
+    if(strcmp(filme->chave,no->array_chaves[i]) == 0) {
       printf("Você tentou inserir uma chave que já existe\n");
       return 1;
     }
@@ -96,11 +96,40 @@ int insere_filme(Index *index, TMovie *filme) {
 
   // se tiver espaço, insere o filme e reescreve o nó
   if(no->n_chaves <= (2*index->ordem)) {
-    return insere_simples(index, no, pos_no);
+    return insere_simples(index, no, pos_no, filme);
   }
 
   // se nao tiver espaço
-  return insere_com_distribuicao(index, no, pos_no);
+  return insere_com_distribuicao(index, no, pos_no, filme);
+}
+
+int insere_simples(Index* index, TNo* no, int pos, TMovie *filme) {
+  printf("insere_simples\n");
+  // se nao tem filhos, só inserir chaves na posição certa
+  char *chave = filme->chave;
+  if(no->end_filhos[0] == -1) {
+    // vou movendo as chaves para frente da última para a primeira paro na primeira chave
+    // que for menor que a minha
+    int i = no->n_chaves;
+    while(i >= 0 && strcmp(no->array_chaves[i], filme->chave) >0) {
+      no->array_chaves[i+1] = no->array_chaves[i];
+      no->filmes[i+1] = no->filmes[i];
+      i--;
+    }
+    // agora que movi todas as chaves maiores pra frente, posso inserir
+    no->array_chaves[i] = filme->chave;
+    no->filmes[i] = filme;
+    no->n_chaves++;
+    index->qtd_filmes++;
+
+    return 0;
+  }
+
+  //se tiver filhos
+}
+
+int insere_com_distribuicao(Index* index, TNo* no, int pos, TMovie *filme) {
+  printf("insere_com_distribuicao\n");
 }
 
 //
@@ -190,15 +219,4 @@ int insere_filme(Index *index, TMovie *filme) {
 //
 //     libera_no(no);
 //     return pos;
-// }
-
-  // TMovie *filme = cria_filme(titulo, ano, diretor, genero, duracao);
-  // novo->movie = filme;
-  // novo->quantaschaves= 0;
-  // novo->ponteiro_pai = NULL;
-  // novo->arraydechaves = (int *) malloc(sizeof(int *) * (d * 2));
-  // novo->filhos = (TNo **) malloc(sizeof(TNo *) * (d * 2) + 1);
-  // for (int i = 0; i < (d * 2 + 1); i++) {
-  //     novo->filhos[i] = NULL;
-  // return novo;
 // }

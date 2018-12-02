@@ -20,6 +20,10 @@ TNo *cria_no(int);
 //Tamanho do Nó para fazer fseek mais fácil
 int tamanho_No(int);
 
+// TO-DO
+// recebe um nó e uma posiçao e escreve ele no arquivo
+int salva_no(Index*, TNo*, int);
+
 //TO-DO
 // recebe um input do usuario e cria um no com ele
 TNo *cria_do_input(char*);
@@ -41,6 +45,10 @@ TNo *busca_por_diretor(char*);
 //TO-DO
 // insere um nó na árvore
 int insere_filme(Index *index, TMovie *filme);
+
+int insere_simples(Index*, TNo*, int, TMovie*);
+
+int insere_com_distribuicao(Index*, TNo*, int, TMovie*);
 
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore
