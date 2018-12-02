@@ -7,6 +7,7 @@
 
 typedef struct Index {
     int qtd_filmes;
+    int pont_raiz;
     int prox_pos_livre;
     char *arvore;
 } Index;

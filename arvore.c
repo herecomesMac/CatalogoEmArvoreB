@@ -4,6 +4,7 @@
 
 #include "arvore.h"
 #include "filme.h"
+#include "index.h"
 
 /* typedef struct No{
   int n_chaves; // quantidades de chaves no nó
