@@ -4,17 +4,16 @@
 
 #include "arvore.h"
 #include "filme.h"
+#include "index.h"
 
 TNo *cria_no(int o) {
   TNo *no = (TNo *) malloc(sizeof(TNo));
   no->n_chaves = 0;
   no->end_pai = -1;
-  no->array_chaves = (char **) malloc(sizeof(char*)*(2*o));
   no->end_filhos = (int *) malloc(sizeof(int) * (2*o+1));
   no->filmes = (TMovie **) malloc(sizeof(TMovie *) * (2*o));
 
   for(int i=0; i< (2*o); i++) {
-    no->array_chaves[i] = NULL;
     no->end_filhos[i] = -1;
     no->filmes[i] = NULL;
   }
@@ -25,20 +24,20 @@ TNo *cria_no(int o) {
 int tamanho_no(int o){
   return sizeof(int) + // m
     sizeof(int) + // pont_pai
-    sizeof(char*)*(2*o) +
-    sizeof(int) * (2 * o + 1) + // p
+    sizeof(int) * (2 * o + 1) + // end_filhos
     tamanho_filme() * (2 * o); // filmes
 }
 
 void libera_no(TNo *no, int o) {
     for (int i = 0; i < 2 * o; i++) {
         free(no->filmes[i]);
-        free(no->array_chaves[i]);
     }
     free(no);
 }
 
 TNo *le_no(Index *index, int pos) {
+
+  int tam_no = tamanho_no(index->ordem);
   TNo *no = cria_no(index->ordem);
   FILE *arv = fopen(index->arvore, "rb");
   size_t buffer_size = tamanho_no(index->ordem);
@@ -49,19 +48,78 @@ TNo *le_no(Index *index, int pos) {
     exit(1);
   }
 
-  fseek(arv, pos, SEEK_SET);
-  size_t info_size = getline(&buffer, &buffer_size, arv);
+  fseek(arv, pos*tam_no, SEEK_SET);
+  fread(&no->n_chaves, sizeof(int), 1, arv);
 
   // se tenho coisas naquela linha, vou ler. Se não, retorno o nó vazio mesmo
-  if (info_size != -1) {
+  if (no->n_chaves <= 0) {
+    int i;
+    fread(&no->end_pai, sizeof(int), 1, arv);
+    fread(&no->end_filhos[0], sizeof(int), 1, arv);
+    for (i = 0; i < no->n_chaves; i++) {
+        no->filmes[i] = le_filme(arv);
+        fread(&no->end_filhos[i + 1], sizeof(int), 1, arv);
+    }
 
+    // Termina de ler dados nulos para resolver problema do cursor
+    // Dados lidos sao descartados
+    TMovie *vazio;
+    int nul = -1;
+    for (i = no->n_chaves; i < 2 * index->ordem; i++) {
+        no->filmes[i] = NULL;
+        vazio = le_filme(arv);
+        fread(&no->end_filhos[i + 1], sizeof(int), 1, arv);
+        free(vazio);
+    }
   }
 
   fclose(arv);
   return no;
 }
 
-int busca(char *chave, Index *index, int pos) {
+TNo *salva_no(TNo *no, Index *index){
+  int i;
+  FILE *arv = fopen(index->arvore, "wb");
+  fwrite(&no->n_chaves, sizeof(int), 1, arv);
+  fwrite(&no->end_pai, sizeof(int), 1, arv);
+  //garantidamente, sempre havera pelo menos 1 chave no noh
+  //portanto, p0 sempre vai existir
+  fwrite(&no->end_filhos[0], sizeof(int), 1, arv);
+  TMovie *vazio = cria_filme("", -1, "", "", -1);
+
+  for (i = 0; i < 2 * index->ordem; i++) {
+      if (no->filmes[i]) {
+          salva_filme(no->filmes[i], index);
+      } else {
+          salva_filme(vazio, index);
+      }
+      fwrite(&no->end_filhos[i + 1], sizeof(int), 1, arv);
+  }
+  free(vazio);
+}
+
+/*void salva_no(No *no, FILE *out) {
+    int i;
+    fwrite(&no->m, sizeof(int), 1, out);
+    fwrite(&no->pont_pai, sizeof(int), 1, out);
+    //garantidamente, sempre havera pelo menos 1 chave no noh
+    //portanto, p0 sempre vai existir
+    fwrite(&no->p[0], sizeof(int), 1, out);
+
+    Filme *vazio = filme("", -1, "", "", -1);
+
+    for (i = 0; i < 2 * D; i++) {
+        if (no->filmes[i]) {
+            salva_filme(no->filmes[i], out);
+        } else {
+            salva_filme(vazio, out);
+        }
+        fwrite(&no->p[i + 1], sizeof(int), 1, out);
+    }
+    free(vazio);
+}
+
+/*int busca(char *chave, Index *index, int pos) {
 
 // a árvore ainda está vazia
   if(index->prox_pos_livre = 0) {
@@ -76,9 +134,9 @@ int busca(char *chave, Index *index, int pos) {
   }
 
 
-}
+}*/
 
-int insere_filme(Index *index, TMovie *filme) {
+/*int insere_filme(Index *index, TMovie *filme) {
   // printf("Inserindo o filme %s\n", filme->titulo);
   // printf("Buscando pela chave do filme (%s) na biblioteca...\n", filme->chave);
   // busca a posição do nó onde o filme deveria estar, começando pela raiz
@@ -131,6 +189,8 @@ int insere_simples(Index* index, TNo* no, int pos, TMovie *filme) {
 int insere_com_distribuicao(Index* index, TNo* no, int pos, TMovie *filme) {
   printf("insere_com_distribuicao\n");
 }
+  return 0;
+}*/
 
 //
 // No *le_no(FILE *in) {

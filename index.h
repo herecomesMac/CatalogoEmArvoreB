@@ -6,8 +6,8 @@
 #include<string.h>
 
 typedef struct Index {
-    int pont_raiz;
     int qtd_filmes;
+    int pont_raiz;
     int prox_pos_livre;
     int ordem;
     char *arvore;

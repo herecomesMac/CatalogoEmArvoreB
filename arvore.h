@@ -6,10 +6,10 @@
 #include "filme.h"
 #include "index.h"
 
+
 typedef struct No{
   int n_chaves; // quantidades de chaves no nó
   int end_pai; // ponteiro para o pai
-  char **array_chaves; // array de chaves
   int *end_filhos; // array de endereço dos filhos
   TMovie **filmes; // dados dos filhos
 }TNo;
@@ -53,5 +53,8 @@ int insere_com_distribuicao(Index*, TNo*, int, TMovie*);
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore
 TNo *remove_no(char*);
+
+//Salva o nó
+TNo *salva_no(TNo *no, Index *index);
 
 #endif

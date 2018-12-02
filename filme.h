@@ -2,6 +2,7 @@
 #define FILME_H
 
 #include<stdio.h>
+#include "index.h"
 
 typedef struct filme{
   char *chave;
@@ -14,6 +15,12 @@ typedef struct filme{
 
 // Gera o ponteiro
 TMovie *inicializa();
+
+//Salva filme
+void salva_filme(TMovie *filme, Index *index);
+
+//Le filme
+TMovie *le_filme(FILE *in);
 
 //Faz a mesma coisa que os strsep, porém como não funcionou, fiz uma função própria.
 char* mystrsep(char** stringp, const char* delim);

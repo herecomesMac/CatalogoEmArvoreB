@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include "arvore.h"
+#include "index.h"
 
 int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
   printf("Lendo arquivo... \n");
