@@ -8,7 +8,6 @@
 typedef struct No{
   int n_chaves; // quantidades de chaves no nó
   int end_pai; // ponteiro para o pai
-  int *array_chaves; // array de chaves
   int *end_filhos; // array de endereço dos filhos
   TMovie **filmes; // dados dos filhos
 }TNo;
