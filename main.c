@@ -30,7 +30,7 @@ int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
   size_t tam_linha;
   while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
     TMovie *novo = cria_da_linha(buffer);
-    int falhou = insere_filme(index, novo, o);
+    int falhou = insere_filme(index, novo);
     if(falhou != 0) {
       printf("Houve uma falha na inserção do filme %s\n", novo->titulo);
     }

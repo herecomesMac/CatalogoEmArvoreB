@@ -5,27 +5,27 @@
 #include "arvore.h"
 #include "filme.h"
 
-/* typedef struct No{
-  int n_chaves; // quantidades de chaves no nó
-  int end_pai; // ponteiro para o pai
-  int *array_chaves; // array de chaves
-  int *end_filhos; // array de endereço dos filhos
-  TMovie **filmes; // dados dos filhos
-}TNo; */
-
 TNo *cria_no(int o) {
   TNo *no = (TNo *) malloc(sizeof(TNo));
   no->n_chaves = 0;
   no->end_pai = -1;
-  no->array_chaves = (int *) malloc(sizeof(char[85]) * (2*o));
+  no->array_chaves = (char **) malloc(sizeof(char*)*(2*o));
   no->end_filhos = (int *) malloc(sizeof(int) * (2*o+1));
-  no->filmes = (TMovie **) malloc(sizeof(TMovie *) * (2*o+1));
+  no->filmes = (TMovie **) malloc(sizeof(TMovie *) * (2*o));
+
+  for(int i=0; i< (2*o); i++) {
+    no->array_chaves[i] = NULL;
+    no->end_filhos[i] = -1;
+    no->filmes[i] = NULL;
+  }
+  return no;
 }
 
 // checada
-int tamanho_No(int o){
+int tamanho_no(int o){
   return sizeof(int) + // m
     sizeof(int) + // pont_pai
+    sizeof(char*)*(2*o) +
     sizeof(int) * (2 * o + 1) + // p
     tamanho_filme() * (2 * o); // filmes
 }
@@ -33,9 +33,73 @@ int tamanho_No(int o){
 void libera_no(TNo *no, int o) {
     for (int i = 0; i < 2 * o; i++) {
         free(no->filmes[i]);
+        free(no->array_chaves[i]);
     }
     free(no);
 }
+
+TNo *le_no(Index *index, int pos) {
+  int tam_no = tamanho_no(index->ordem);
+  TNo *no = cria_no(index->ordem);
+  FILE *arv = fopen(index->arvore, "rb");
+  size_t buffer_size = tam_no;
+  char* buffer = (char *)malloc(buffer_size);
+
+  if(buffer == NULL || !index) {
+    printf("Sem espaço na memória :(\n");
+    exit(1);
+  }
+
+  fseek(arv, pos*tam_no, SEEK_SET);
+  size_t info_size = getline(&buffer, &buffer_size, arv);
+
+  // se tenho coisas naquela linha, vou ler. Se não, retorno o nó vazio mesmo
+  if (info_size != -1) {
+
+  }
+
+  fclose(arv);
+  return no;
+}
+
+int busca(char *chave, Index *index, int pos) {
+
+// a árvore ainda está vazia
+  if(index->prox_pos_livre = 0) {
+    return 0;
+  }
+
+  // lẽ o nó para a memória
+  TNo *no = le_no(index, pos);
+  // checa se a chave está ali ou em um dos filhos
+  for (int i = 0; i < 2 * index->ordem; i++) {
+      // printf("%d, %s\n", i, no->);
+  }
+
+
+}
+
+int insere_filme(Index *index, TMovie *filme) {
+  // printf("Inserindo o filme %s\n", filme->titulo);
+  // printf("Buscando pela chave do filme (%s) na biblioteca...\n", filme->chave);
+  // busca a posição do nó onde o filme deveria estar, começando pela raiz
+  int pos_no = busca(filme->chave, index, index->pont_raiz);
+
+  // lê o nó naquela posição para a memória
+  TNo *no = le_no(index, pos_no);
+  // se a chave já está no nó, retorna erro
+  for(int i=0; i < no->n_chaves; i++) {
+    if(no->filmes[i]->chave == filme->chave) {
+      printf("Você tentou inserir uma chave que já existe\n");
+      return 1;
+    }
+  }
+
+  // se tiver espaço, insere o filme e reescreve o nó
+  // se nao tiver espaço
+  return 0;
+}
+
 //
 // No *le_no(FILE *in) {
 //     int i;
@@ -135,8 +199,3 @@ void libera_no(TNo *no, int o) {
   //     novo->filhos[i] = NULL;
   // return novo;
 // }
-
-void insere_no(TNo *arv, TNo *no, int o) {
-  printf("To be implemented\n");
-  return;
-}
