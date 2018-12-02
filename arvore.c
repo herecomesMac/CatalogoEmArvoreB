@@ -39,10 +39,9 @@ void libera_no(TNo *no, int o) {
 }
 
 TNo *le_no(Index *index, int pos) {
-  int tam_no = tamanho_no(index->ordem);
   TNo *no = cria_no(index->ordem);
   FILE *arv = fopen(index->arvore, "rb");
-  size_t buffer_size = tam_no;
+  size_t buffer_size = tamanho_no(index->ordem);
   char* buffer = (char *)malloc(buffer_size);
 
   if(buffer == NULL || !index) {
@@ -50,7 +49,7 @@ TNo *le_no(Index *index, int pos) {
     exit(1);
   }
 
-  fseek(arv, pos*tam_no, SEEK_SET);
+  fseek(arv, pos, SEEK_SET);
   size_t info_size = getline(&buffer, &buffer_size, arv);
 
   // se tenho coisas naquela linha, vou ler. Se não, retorno o nó vazio mesmo
@@ -96,8 +95,12 @@ int insere_filme(Index *index, TMovie *filme) {
   }
 
   // se tiver espaço, insere o filme e reescreve o nó
+  if(no->n_chaves <= (2*index->ordem)) {
+    return insere_simples(index, no, pos_no);
+  }
+
   // se nao tiver espaço
-  return 0;
+  return insere_com_distribuicao(index, no, pos_no);
 }
 
 //
