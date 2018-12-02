@@ -8,11 +8,12 @@
 typedef struct Index {
     int qtd_filmes;
     int prox_pos_livre;
+    int ordem;
     char *arvore;
 } Index;
 
 // Aloca espaço na memória e inicializa um index vazio
-Index *cria_index(char* arq_arv);
+Index *cria_index(char* arq_arv, int ordem);
 
 // TO-DO
 // Le o arquivo de dados e imprime a biblioteca

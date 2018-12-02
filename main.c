@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include "arvore.h"
-#include "index.h"
 
 int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
   printf("Lendo arquivo... \n");
@@ -17,7 +16,7 @@ int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
 
   // Abrindo arquivos, criando o objeto do index e o buffer
   printf("Gerando a biblioteca...\n");
-  Index *index = cria_index(arq_index);
+  Index *index = cria_index(arq_index, o);
   le_biblioteca(index);
   size_t buffer_size = sizeof(TMovie);
   char* buffer = (char *)malloc(buffer_size);
@@ -31,9 +30,12 @@ int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
   size_t tam_linha;
   while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
     TMovie *novo = cria_da_linha(buffer);
-    //insere_no(arv, novo, o);
+    int falhou = insere_filme(index, novo, o);
+    if(falhou != 0) {
+      printf("Houve uma falha na inserção do filme %s\n", novo->titulo);
+    }
   }
-  printf("Tudo pronto! Sua biblioteca tem AQUI titulos no momento.\n");
+  printf("Tudo pronto! Sua biblioteca tem %d titulos no momento.\n", index->qtd_filmes);
   fclose(arq);
 return 0;
 }

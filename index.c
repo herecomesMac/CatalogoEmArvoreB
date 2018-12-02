@@ -3,10 +3,11 @@
 
 #include "index.h"
 
-Index *cria_index(char* nome_arq_arv) {
+Index *cria_index(char* nome_arq_arv, int ordem) {
     Index *index = (Index *) malloc(sizeof(Index));
     index->qtd_filmes = 0;
     index->prox_pos_livre = 0;
+    index->ordem = ordem;
     index->arvore = nome_arq_arv;
     return index;
 }
