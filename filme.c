@@ -26,6 +26,7 @@ TMovie *cria_da_linha(char *linha) {
   char* palavra;
   for (size_t i = 0; i < 5; i++) {
     palavra = mystrsep(&linha, "/");
+    printf("%s\n", palavra);
     switch (i) {
       case 0:
         titulo = palavra;
@@ -43,9 +44,9 @@ TMovie *cria_da_linha(char *linha) {
         duracao = atoi(palavra);
         break;
     }
-    TMovie *novo = cria_filme(titulo, ano, diretor, genero, duracao);
-    imprime_info(novo);
   }
+  TMovie *novo = cria_filme(titulo, ano, diretor, genero, duracao);
+  imprime_info(novo);
 }
 
 // Aloca o espaço na memória e preenche o objeto

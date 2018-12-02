@@ -29,8 +29,8 @@ int monta_biblioteca(char *arq_nome, int o) {
 
   // para cada linha, crio um filme e insiro na árvore
   while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
-    TNo *novo = cria_da_linha(buffer);
-    insere_no(arv, novo, o);
+    TMovie *novo = cria_da_linha(buffer);
+    //insere_no(arv, novo, o);
     count++;
   }
   printf("Tudo pronto! Sua biblioteca tem %d titulos no momento.\n", count);

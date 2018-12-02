@@ -125,7 +125,7 @@ void libera_no(TNo *no, int o) {
 //     return pos;
 // }
 
-  TMovie *filme = cria_filme(titulo, ano, diretor, genero, duracao);
+  // TMovie *filme = cria_filme(titulo, ano, diretor, genero, duracao);
   // novo->movie = filme;
   // novo->quantaschaves= 0;
   // novo->ponteiro_pai = NULL;
@@ -133,8 +133,8 @@ void libera_no(TNo *no, int o) {
   // novo->filhos = (TNo **) malloc(sizeof(TNo *) * (d * 2) + 1);
   // for (int i = 0; i < (d * 2 + 1); i++) {
   //     novo->filhos[i] = NULL;
-  return novo;
-}
+  // return novo;
+// }
 
 void insere_no(TNo *arv, TNo *no, int o) {
   printf("To be implemented\n");
