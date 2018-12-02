@@ -17,6 +17,14 @@ int tamanho_filme(){
     sizeof(int);
 }
 
+char *cria_chave(char* titulo, int ano) {
+  char *chave = (char *)malloc(sizeof(char)*86);
+  sprintf(chave, "%d", ano);
+  strcat(chave, "-");
+  strcat(chave, titulo);
+  return chave;
+}
+
 // Cria de verdade um nó e preenche, recebe a linha lida como input
 TMovie *cria_da_linha(char *linha) {
   char *titulo, *diretor, *genero;
@@ -26,7 +34,6 @@ TMovie *cria_da_linha(char *linha) {
   char* palavra;
   for (size_t i = 0; i < 5; i++) {
     palavra = mystrsep(&linha, "/");
-    printf("%s\n", palavra);
     switch (i) {
       case 0:
         titulo = palavra;
@@ -53,6 +60,7 @@ TMovie *cria_da_linha(char *linha) {
 TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int duracao) {
   TMovie *novo = (TMovie *) malloc(sizeof(TMovie));
   strcpy(novo->titulo, titulo);
+  novo->chave = cria_chave(titulo, ano);
   novo->ano = ano;
   strcpy(novo->diretor, diretor);
   strcpy(novo->genero, genero);
@@ -63,7 +71,7 @@ TMovie *cria_filme(char* titulo, int ano, char* diretor, char* genero, int durac
 
 void imprime_info(TMovie *filme){
   printf("Titulo: %s \n", filme->titulo);
-  printf("Chave: %s \n", filme->chave);
+  printf("---Chave: %s \n", filme->chave);
   printf("---Ano de Lancamento: %i \n", filme->ano);
   printf("---Diretor: %s \n", filme->diretor);
   printf("---Genero: %s \n", filme->genero);

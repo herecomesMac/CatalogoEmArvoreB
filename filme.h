@@ -4,7 +4,7 @@
 #include<stdio.h>
 
 typedef struct filme{
-  char chave[85];
+  char *chave;
   char titulo[80]; //titulo do filme
   int ano; //ano de lançamento
   char diretor[50]; //nome do diretor
@@ -17,6 +17,9 @@ TMovie *inicializa();
 
 //Faz a mesma coisa que os strsep, porém como não funcionou, fiz uma função própria.
 char* mystrsep(char** stringp, const char* delim);
+
+// Cria uma chave ANO-TITULO
+char *cria_chave(char* titulo, int ano);
 
 //TO-DO
 // Cria de verdade um nó e preenche, recebe a linha lida como input
@@ -35,8 +38,10 @@ int tamanho_filme();
 // Recebe um ponteiro para o primeiro nó da fila e imprime todos usando o imprime_info
 void imprime_fila(TMovie*);
 
-// TO-DO
 // recebe o ano e o diretor e gera uma chave
 char *gera_chave(char*, char*);
+
+// recebe um ponteiro de filme e deleta da memória
+int deleta_filme(TMovie*);
 
 #endif // FILME_H

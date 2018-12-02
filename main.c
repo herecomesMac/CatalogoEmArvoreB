@@ -24,16 +24,14 @@ int monta_biblioteca(char *arq_nome, int o) {
     exit(1);
   } //declarando o tamanho da linha separado porque deu ruim
   size_t tam_linha;
-  int count = 0;
   TNo *arv = cria_no(o);
 
   // para cada linha, crio um filme e insiro na árvore
   while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
     TMovie *novo = cria_da_linha(buffer);
     //insere_no(arv, novo, o);
-    count++;
   }
-  printf("Tudo pronto! Sua biblioteca tem %d titulos no momento.\n", count);
+  printf("Tudo pronto! Sua biblioteca tem AQUI titulos no momento.\n");
   fclose(arq);
 return 0;
 }

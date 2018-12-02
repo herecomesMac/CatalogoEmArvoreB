@@ -17,7 +17,7 @@ TNo *cria_no(int o) {
   TNo *no = (TNo *) malloc(sizeof(TNo));
   no->n_chaves = 0;
   no->end_pai = -1;
-  no->array_chaves = (int *) malloc(sizeof(int) * (2*o));
+  no->array_chaves = (int *) malloc(sizeof(char[85]) * (2*o));
   no->end_filhos = (int *) malloc(sizeof(int) * (2*o+1));
   no->filmes = (TMovie **) malloc(sizeof(TMovie *) * (2*o+1));
 }
