@@ -3,15 +3,16 @@
 
 #include "index.h"
 
-Index *index(FILE* arvore) {
+Index *cria_index(char* nome_arq_arv) {
     Index *index = (Index *) malloc(sizeof(Index));
     index->qtd_filmes = 0;
     index->prox_pos_livre = 0;
-    index->arvore = arvore;
+    index->arvore = nome_arq_arv;
     return index;
 }
 
 // TO-DO
 // Le o arquivo de dados e imprime a biblioteca
-void *le_biblioteca() {
+void *le_biblioteca(Index *index) {
+  printf("%s\n", index->arvore);
 }

@@ -53,7 +53,6 @@ TMovie *cria_da_linha(char *linha) {
     }
   }
   TMovie *novo = cria_filme(titulo, ano, diretor, genero, duracao);
-  imprime_info(novo);
 }
 
 // Aloca o espaço na memória e preenche o objeto
