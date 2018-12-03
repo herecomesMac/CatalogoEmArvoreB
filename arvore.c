@@ -77,7 +77,7 @@ TNo *le_no(Index *index, int pos) {
   return no;
 }
 
-TNo *salva_no(TNo *no, Index *index){
+void salva_no(TNo *no, Index *index){
   int i;
   FILE *arv = fopen(index->arvore, "wb");
   fwrite(&no->n_chaves, sizeof(int), 1, arv);
@@ -96,27 +96,56 @@ TNo *salva_no(TNo *no, Index *index){
       fwrite(&no->end_filhos[i + 1], sizeof(int), 1, arv);
   }
   free(vazio);
+  fclose(arv);
 }
 
-/*void salva_no(No *no, FILE *out) {
-    int i;
-    fwrite(&no->m, sizeof(int), 1, out);
-    fwrite(&no->pont_pai, sizeof(int), 1, out);
-    //garantidamente, sempre havera pelo menos 1 chave no noh
-    //portanto, p0 sempre vai existir
-    fwrite(&no->p[0], sizeof(int), 1, out);
+int altera(char *titulo, int ano, Index *index){
+  FILE *arv = fopen(index->arvore, "rb");
+  char *nome = cria_chave(titulo, ano);
+  int end;
+  int *encontrou = 0;
+  end = busca(nome, index, 0, encontrou);
+  if(!encontrou){
+      printf("O filme que desejas alterar nao existe");
+      return 0;
+  }
+  fseek(arv, end, SEEK_SET);
+  TMovie* buscado = le_filme(arv);
+  imprime_info(buscado);
+  char novo_Diretor[50], novo_genero[50];
+  int nova_dur;
+  printf("Digite o novo diretor: ");
+  scanf("%[^\n]s ",novo_Diretor);
+  printf("Digite o novo genero: ");
+  scanf("%[^\n]s ",novo_genero);
+  printf("Digite a nova duracao: ");
+  scanf("%i", &nova_dur);
+  int y;
+  for(y=0; y<50;y++){
+      buscado->diretor[y] = novo_Diretor[y];
+      buscado->genero[y] = novo_genero[y];
+  }
+  buscado->duracao = nova_dur;
+  salva_filme(buscado, index);
+  free(buscado);
+  return 1;
+}
 
-    Filme *vazio = filme("", -1, "", "", -1);
-
-    for (i = 0; i < 2 * D; i++) {
-        if (no->filmes[i]) {
-            salva_filme(no->filmes[i], out);
-        } else {
-            salva_filme(vazio, out);
-        }
-        fwrite(&no->p[i + 1], sizeof(int), 1, out);
+//vai percorrer todo o arquivo buscando no por no pelo Diretor
+void busca_por_diretor(char* diretor, Index *index){
+  FILE *arv = fopen(index->arvore, "rb");
+  int i = 0;
+  TNo *no_lido = le_no(index, i);
+  while(no_lido != NULL){
+    int j;
+    for(j=0; j<no_lido->n_chaves;j++){
+      if(strcmp(diretor, no_lido->filmes[j]->diretor)==0){
+        imprime_info(no_lido->filmes[j]);
+      }
     }
-    free(vazio);
+    i++;
+    no_lido = le_no(index, i*tamanho_no(index->ordem));
+  }
 }
 
 /*int busca(char *chave, Index *index, int pos) {

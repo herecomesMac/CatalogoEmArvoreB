@@ -36,7 +36,7 @@ void libera_no(TNo *no, int o);
 // TO-DO
 // Percorre todos os nós da árvore a partir do primeiro e retorna uma fila de nós
 // daquele diretor
-TNo *busca_por_diretor(char*);
+void busca_por_diretor(char* diretor, Index *index);
 
 //TO-DO
 // insere um nó na árvore
@@ -47,6 +47,6 @@ int insere_filme(Index *index, TMovie *filme);
 TNo *remove_no(char*);
 
 //Salva o nó
-TNo *salva_no(TNo *no, Index *index);
+void salva_no(TNo *no, Index *index);
 
 #endif
