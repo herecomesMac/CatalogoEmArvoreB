@@ -188,22 +188,36 @@ void busca_por_diretor(char* diretor, Index *index){
 
 int busca(char *chave, Index *index, int pos, int* achou) {
 
-// a árvore ainda está vazia
+// a árvore ainda está vazia (única chance de eu não ter chaves no nó)
 printf("prox livre: %d\n", index->prox_pos_livre);
   if(index->prox_pos_livre == 0) {
     index->pont_raiz = 0;
-    achou = 0;
+    *achou = 0;
     return 0;
   }
 
   // lẽ o nó para a memória
   TNo *no = le_no(index, pos);
-  // checa se a chave está ali ou em um dos filhos
-  for (int i = 0; i < 2 * index->ordem; i++) {
-      // printf("%d, %s\n", i, no->);
+
+  // acha a posição da última chave maior ou igual à minha
+  int i = 0;
+  while (i < no->n_chaves && strcmp(no->array_chaves[i], chave) <= 0) {
+    i++;
   }
 
+  // a primeira chave maior ou igual à mim é a que eu buscava
+  if(strcmp(no->array_chaves[i], chave) == 0) {
+    *achou = 1;
+    return pos;
+  }
 
+  // não achei, mas sou folha
+  if(no->end_filhos[0] == -1) {
+    return pos;
+  }
+
+  // continuo buscando no ponteiro da esquerda da chave atual
+  return busca(chave, index, no->end_filhos[i], achou);
 }
 
 int insere_filme(Index *index, TMovie *filme) {
