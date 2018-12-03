@@ -192,7 +192,6 @@ int busca(char *chave, Index *index, int pos, int* achou) {
 printf("prox livre: %d\n", index->prox_pos_livre);
   if(index->prox_pos_livre == 0) {
     index->pont_raiz = 0;
-    *achou = 0;
     return 0;
   }
 
@@ -225,18 +224,20 @@ int insere_filme(Index *index, TMovie *filme) {
   printf("Buscando pela chave do filme (%s) na biblioteca...\n", filme->chave);
 
   // busca a posição do nó onde o filme deveria estar, começando pela raiz
-  int *achou = 0;
-  int pos_no = busca(filme->chave, index, index->pont_raiz, achou);
+  int achou = 0;
+  int *ptr_achou = &achou;
+  int pos_no = busca(filme->chave, index, index->pont_raiz, ptr_achou);
   printf("pos_no %d\n", pos_no);
 
-  // lê o nó naquela posição para a memória
-  TNo *no = le_no(index, pos_no);
-  printf("n_chaves %d\n", no->n_chaves);
   // se a chave já está no nó, retorna erro
   if(achou != 0) {
     printf("Você tentou inserir uma chave que já existe\n");
     return 1;
   }
+
+  // lê o nó naquela posição para a memória
+  TNo *no = le_no(index, pos_no);
+  printf("n_chaves %d\n", no->n_chaves);
 
   // se tiver espaço, insere o filme e reescreve o nó
   if(no->n_chaves <= (2*index->ordem)) {
