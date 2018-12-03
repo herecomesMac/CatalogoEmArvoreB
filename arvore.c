@@ -79,9 +79,9 @@ TNo *le_no(Index *index, int pos) {
   return no;
 }
 
-
+<<<<<<< HEAD
 void salva_no(TNo *no, Index *index){
-
+=======
 void *salva_no(TNo *no, Index *index, int pos){
 >>>>>>> 53be34f6ff5dfc857fe53688ab2178c99b1baf3f
   int i;
@@ -170,11 +170,12 @@ void busca_por_diretor(char* diretor, Index *index){
     i++;
     no_lido = le_no(index, i*tamanho_no(index->ordem));
   }
+=======
 
   free(vazio);
   libera_no(no, index->ordem);
   fclose(arv);
-
+>>>>>>> 53be34f6ff5dfc857fe53688ab2178c99b1baf3f
 }
 
 int busca(char *chave, Index *index, int pos, int* achou) {
