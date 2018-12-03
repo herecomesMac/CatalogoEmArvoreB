@@ -24,16 +24,6 @@ TMovie *le_filme(FILE *in){
     return filme;
 }
 
-void salva_filme(TMovie *filme, Index *index){
-  FILE *out = fopen(index->arvore, "wb");
-  fwrite(filme->titulo, sizeof(char), sizeof(filme->titulo), out);
-  fwrite(&filme->ano, sizeof(int), 1, out);
-  fwrite(filme->diretor, sizeof(char), sizeof(filme->diretor), out);
-  fwrite(filme->genero, sizeof(char), sizeof(filme->genero), out);
-  fwrite(&filme->duracao, sizeof(int), 1, out);
-}
-
-
 int tamanho_filme(){
   return sizeof(char[80]) +
     sizeof(int) +

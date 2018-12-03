@@ -10,6 +10,7 @@
 typedef struct No{
   int n_chaves; // quantidades de chaves no nó
   int end_pai; // ponteiro para o pai
+  char **array_chaves; // array de chaves
   int *end_filhos; // array de endereço dos filhos
   TMovie **filmes; // dados dos filhos
 }TNo;
@@ -25,7 +26,7 @@ int tamanho_No(int);
 TNo *cria_do_input(char*);
 
 // Busca um nó pela sua chave primária
-int busca(char *chave, Index *index, int pos);
+int busca(char *chave, Index *index, int pos, int*);
 
 //Le o no
 TNo *le_no(Index *index, int pos);
@@ -42,11 +43,19 @@ void busca_por_diretor(char* diretor, Index *index);
 // insere um nó na árvore
 int insere_filme(Index *index, TMovie *filme);
 
+int insere_simples(Index*, TNo*, int, TMovie*);
+
+int insere_com_distribuicao(Index*, TNo*, int, TMovie*);
+
 // TO-DO
 // recebe uma have e remove o nó com aquela chave da árvore
 TNo *remove_no(char*);
 
 //Salva o nó
+<<<<<<< HEAD
 void salva_no(TNo *no, Index *index);
+=======
+void *salva_no(TNo *no, Index *index, int pos);
+>>>>>>> 53be34f6ff5dfc857fe53688ab2178c99b1baf3f
 
 #endif
