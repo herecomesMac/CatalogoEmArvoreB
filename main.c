@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include "arvore.h"
-#include "index.h"
 
 int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
   printf("Lendo arquivo... \n");
@@ -18,7 +17,6 @@ int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
   // Abrindo arquivos, criando o objeto do index e o buffer
   printf("Gerando a biblioteca...\n");
   Index *index = cria_index(arq_index, o);
-  le_biblioteca(index);
   size_t buffer_size = sizeof(TMovie);
   char* buffer = (char *)malloc(buffer_size);
 

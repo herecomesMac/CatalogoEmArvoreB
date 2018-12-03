@@ -10,6 +10,7 @@
 typedef struct No{
   int n_chaves; // quantidades de chaves no nó
   int end_pai; // ponteiro para o pai
+  char **array_chaves;
   int *end_filhos; // array de endereço dos filhos
   TMovie **filmes; // dados dos filhos
 }TNo;
@@ -20,16 +21,12 @@ TNo *cria_no(int);
 //Tamanho do Nó para fazer fseek mais fácil
 int tamanho_No(int);
 
-// TO-DO
-// recebe um nó e uma posiçao e escreve ele no arquivo
-int salva_no(Index*, TNo*, int);
-
 //TO-DO
 // recebe um input do usuario e cria um no com ele
 TNo *cria_do_input(char*);
 
 // Busca um nó pela sua chave primária
-int busca(char *chave, Index *index, int pos);
+int busca(char *chave, Index *index, int pos, int*);
 
 //Le o no
 TNo *le_no(Index *index, int pos);
@@ -55,6 +52,6 @@ int insere_com_distribuicao(Index*, TNo*, int, TMovie*);
 TNo *remove_no(char*);
 
 //Salva o nó
-TNo *salva_no(TNo *no, Index *index);
+void *salva_no(TNo *no, Index *index, int pos);
 
 #endif
