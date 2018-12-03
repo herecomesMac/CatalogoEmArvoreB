@@ -48,6 +48,13 @@ TNo *le_no(Index *index, int pos) {
   TNo *no = cria_no(index->ordem);
   FILE *arv = fopen(index->arvore, "rb");
 
+  // se meu arquivo está vazio não tem nada pra ler
+  int asdf = ftell(arv);
+  fseek(arv, 0L, SEEK_END);
+  if(ftell(arv) == 0L) {
+    return no;
+  }
+
   fseek(arv, pos, SEEK_SET);
   fread(&no->n_chaves, sizeof(int), 1, arv);
 
@@ -80,10 +87,6 @@ TNo *le_no(Index *index, int pos) {
         fread(&no->end_filhos[i + 1], sizeof(int), 1, arv);
         free(vazio);
     }
-  }
-
-  if(pos == index->prox_pos_livre) {
-    index->prox_pos_livre = ftell(arv);
   }
 
   fclose(arv);
@@ -126,6 +129,11 @@ void *salva_no(TNo *no, Index *index, int pos){
         fwrite(&vazio->duracao, sizeof(int), 1, arv);
       }
   }
+
+  if(pos == index->prox_pos_livre) {
+    index->prox_pos_livre = ftell(arv);
+  }
+
   free(vazio);
   libera_no(no, index->ordem);
   fclose(arv);
