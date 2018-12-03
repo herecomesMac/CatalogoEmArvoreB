@@ -52,10 +52,8 @@ int insere_com_distribuicao(Index*, TNo*, int, TMovie*);
 TNo *remove_no(char*);
 
 //Salva o nó
-<<<<<<< HEAD
-void salva_no(TNo *no, Index *index);
-=======
 void *salva_no(TNo *no, Index *index, int pos);
->>>>>>> 53be34f6ff5dfc857fe53688ab2178c99b1baf3f
+
+void salva_filme(TMovie *filme, Index *index);
 
 #endif

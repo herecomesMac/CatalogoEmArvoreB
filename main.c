@@ -27,13 +27,13 @@ int monta_biblioteca(char *arq_nome, char *arq_index, int o) {
 
   // leio cada linha, crio um filme e insiro na árvore
   size_t tam_linha;
-  while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
+   while ((tam_linha = getline(&buffer, &buffer_size, arq)) != -1) {
     TMovie *novo = cria_da_linha(buffer);
     int falhou = insere_filme(index, novo);
     if(falhou != 0) {
       printf("Houve uma falha na inserção do filme %s\n", novo->titulo);
     }
-  }
+   }
   printf("Tudo pronto! Sua biblioteca tem %d titulos no momento.\n", index->qtd_filmes);
   fclose(arq);
 return 0;
