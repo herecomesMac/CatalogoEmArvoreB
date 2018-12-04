@@ -280,8 +280,26 @@ int insere_simples(Index* index, TNo* no, int pos, TMovie *filme) {
   return 0;
 }
 
-int insere_com_distribuicao(Index* index, TNo* no_pai, int pos, TMovie *filme) {
-  printf("insere_com_distribuicao\n");
+int insere_com_distribuicao(Index* index, TNo* no, int pos, TMovie *filme) {
+  TNo *pai, *novo = cria_no(index->ordem);
+  // crio um novo nó para a esquerda
+  salva_no(novo, index, index->prox_pos_livre);
+
+  // se o nó cheio for raiz
+  // crio um novo nó vazio, escrevo na memória reposicionando a raiz da árvore
+  // e seto o pai do nó atual para ele
+  if(no->end_pai == -1) {
+    TNo* nova_raiz = cria_no(index->ordem);
+    index->pont_raiz = index->prox_pos_livre;
+    salva_no(nova_raiz, index, index->prox_pos_livre);
+    no->end_pai=index->pont_raiz;
+  }
+  // agora eu pego o pai ou a nova raiz
+  pai = le_no(index, no->end_pai);
+
+  TMovie *sobe;
+  // insiro as d menores chaves na esquerda
+  // a chave do meio vai para sobe e é inserida no pai por recursão
 
   return 1;
 }
@@ -296,7 +314,7 @@ void salva_filme(TMovie *filme, Index *index) {
   fclose(out);
 }
 
-//Caso de concatenação da árvore 
+//Caso de concatenação da árvore
 void concatenacao(TNo *adjacente, TNo *pai, TNo *no, int posicao_no_pai, int end_pai, Index *index,  int end_filme, int end_adjacente){
 
     adjacente->filmes[adjacente->n_chaves] = pai->filmes[posicao_no_pai];
