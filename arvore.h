@@ -15,6 +15,16 @@ typedef struct No{
   TMovie **filmes; // dados dos filhos
 }TNo;
 
+//Remove por Genero
+void remove_genero(char *genero, Index *index);
+
+//Casos especiais da exclusão
+void redistribuicao(TNo *no_adjacente, TNo *pai, TNo *no, int posicao_no_pai, int end_pai, Index *index, int lado, int end_filme, int end_adjacente);
+void concatenacao(TNo *adjancente, TNo *pai, TNo *no, int posicao_no_pai, int end_pai, Index *index,  int end_filme, int end_adjacente);
+
+//Função principal de exclusão
+int exclui(int ano, char *nome_filme, Index *index);
+
 // Gera um nó sem dados
 TNo *cria_no(int);
 
@@ -47,13 +57,11 @@ int insere_simples(Index*, TNo*, int, TMovie*);
 
 int insere_com_distribuicao(Index*, TNo*, int, TMovie*);
 
-// TO-DO
-// recebe uma have e remove o nó com aquela chave da árvore
-TNo *remove_no(char*);
-
 //Salva o nó
 void *salva_no(TNo *no, Index *index, int pos);
 
 void salva_filme(TMovie *filme, Index *index);
+
+int altera(char *titulo, int ano, Index *index);
 
 #endif

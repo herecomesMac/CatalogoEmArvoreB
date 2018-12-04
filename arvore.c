@@ -172,7 +172,7 @@ int altera(char *titulo, int ano, Index *index){
   return 0;
 }
 
-//vai percorrer todo o arquivo buscando no por no pelo Diretor
+//vai percorrer todo o arquivo buscando no por no pelo Diretor e imprimindo
 void busca_por_diretor(char* diretor, Index *index){
   FILE *arv = fopen(index->arvore, "rb");
   int i = 0;
@@ -187,11 +187,8 @@ void busca_por_diretor(char* diretor, Index *index){
     i++;
     no_lido = le_no(index, i*tamanho_no(index->ordem));
   }
-
-  // free(vazio);
   libera_no(no_lido, index->ordem);
   fclose(arv);
-
 }
 
 int busca(char *chave, Index *index, int pos, int* achou) {
@@ -297,4 +294,176 @@ void salva_filme(TMovie *filme, Index *index) {
   fwrite(filme->genero, sizeof(char), sizeof(filme->genero), out);
   fwrite(&filme->duracao, sizeof(int), 1, out);
   fclose(out);
+}
+
+//Caso de concatenação da árvore 
+void concatenacao(TNo *adjacente, TNo *pai, TNo *no, int posicao_no_pai, int end_pai, Index *index,  int end_filme, int end_adjacente){
+
+    adjacente->filmes[adjacente->n_chaves] = pai->filmes[posicao_no_pai];
+    adjacente->n_chaves++;
+    pai->filmes[posicao_no_pai] = NULL;
+    pai->n_chaves--;
+    int i;
+    for(i = 0; i < no->n_chaves; i++)
+        adjacente->filmes[adjacente->n_chaves + i] = no->filmes[i];
+    adjacente->n_chaves = adjacente->n_chaves + no->n_chaves;
+    pai->end_filhos[posicao_no_pai] = -1;
+    if(pai->n_chaves < index->ordem){
+      TNo *novo_pai = le_no(index, pai->end_pai);
+      TNo *temp;
+      int posicao_no_pai_novo;
+      for(posicao_no_pai_novo = 0; posicao_no_pai_novo < pai->n_chaves + 1; posicao_no_pai_novo++){
+          if(pai->end_filhos[posicao_no_pai_novo] != -1){
+              temp = le_no(index, pai->end_filhos[posicao_no_pai_novo]);
+              if(temp == pai)
+                  break;
+          }
+      }
+      concatenacao(pai, le_no(index, pai->end_pai), le_no(index, pai->end_filhos[posicao_no_pai_novo]), posicao_no_pai_novo, pai->end_pai, index, end_filme, end_adjacente);
+    }
+    salva_no(no, index, end_filme);
+    salva_no(adjacente, index, end_adjacente);
+    salva_no(pai, index, end_pai);
+}
+
+//Caso de redistribuição da árvore
+void redistribuicao(TNo *no_adjacente, TNo *pai, TNo *no, int posicao_no_pai, int end_pai, Index *index, int lado, int end_filme, int end_adjacente) {
+
+    int i;
+    //Se o lado do no_adjacente for direita, tenho que copiar primeiro os filmes do no, depois a raiz, depois o no_adjacente
+    if(lado){
+      no->filmes[no->n_chaves] = pai->filmes[posicao_no_pai];
+      no->n_chaves++;
+      no->filmes[posicao_no_pai] = no_adjacente->filmes[0];
+      for(i=0; i<(no_adjacente->n_chaves)-1;i++){
+        no_adjacente->filmes[i] = no_adjacente->filmes[i+1];
+      }
+      no_adjacente->filmes[no->n_chaves] = NULL;
+      no_adjacente->n_chaves--;
+    }else{ //se o lado do no_adjacente for esquerdo, tenho que copiar primeiro o no_adjacente, depois raiz, depois no
+      for(i=no->n_chaves; i>0;i--){
+        no->filmes[i] = no->filmes[i-1];
+      }
+      no->filmes[0] = pai->filmes[posicao_no_pai];
+      no->n_chaves++;
+      pai->filmes[posicao_no_pai] = no_adjacente->filmes[no_adjacente->n_chaves];
+      no_adjacente->n_chaves--;
+    }
+    salva_no(no, index, end_filme);
+    salva_no(no_adjacente, index, end_adjacente);
+    salva_no(pai, index, end_pai);
+}
+
+int exclui(int ano, char *nome_filme, Index *index){
+    FILE *arq = fopen(index->arvore, "wb");
+    char *nome = cria_chave(nome_filme, ano);
+    int *achou = 0;
+    int end_filme = busca(nome, index, 0, achou);
+
+    if(achou == 0){
+        return -1;
+    }else{
+        TNo *no = le_no(index, end_filme);
+        int i, indice_filme;
+        for(i=0;i<no->n_chaves; i++){
+          if(strcmp(nome, no->filmes[i]->titulo)==0){
+            indice_filme = i;
+          }
+        }
+        //É folha e vou apenas excluir, neste caso, só sobreescrever
+        if(no->end_filhos[0] == -1){
+          for(i = indice_filme; i < (no->n_chaves)-1; i++){
+              no->filmes[i] = no->filmes[i+1];
+          }
+          no->filmes[(no->n_chaves)-1] = NULL;
+          no->n_chaves--;
+          //Casos especiais
+          if(no->n_chaves < index->ordem){
+              TNo *pai = le_no(index, no->end_pai);
+              TNo *temp;
+              int posicao_no_pai;
+              for(posicao_no_pai = 0; posicao_no_pai < pai->n_chaves + 1; posicao_no_pai++){
+                  if(pai->end_filhos[posicao_no_pai] != -1){
+                      temp = le_no(index, pai->end_filhos[posicao_no_pai]);
+                      if(temp == no)
+                          break;
+
+                  }
+              }
+              int end_adjacente, lado; //lado vai me dizer se o no_adjacente está na direita ou esquerda, 1 direita, 0 esquerda
+              TNo *adjacente;
+              if(posicao_no_pai == 0){
+                  adjacente = le_no(index, pai->end_filhos[posicao_no_pai+1]);
+                  lado = 1;
+              }else{
+                  adjacente = le_no(index, pai->end_filhos[posicao_no_pai-1]);
+                  lado = 0;
+              }
+              if((adjacente->n_chaves + no->n_chaves) >= 2 * index->ordem){
+                  redistribuicao(adjacente , pai, no, posicao_no_pai, no->end_pai, index, lado, end_filme, end_adjacente);}
+              else{
+                printf("Hello");
+                  concatenacao(adjacente , pai, no, posicao_no_pai,no->end_pai,index,  end_filme, end_adjacente);
+                }
+          }
+        }else{
+          TNo *filho = le_no(index, no->end_filhos[indice_filme+1]);
+          while(filho->end_filhos[0] != -1){
+              filho = le_no(index, filho->end_filhos[0]);
+          }
+          no->filmes[indice_filme] = filho->filmes[0];
+          int i;
+          for(i = 0; i < (filho->n_chaves) - 1; i++)
+              filho->filmes[i] = filho->filmes[i+1];
+          filho->filmes[(filho->n_chaves) - 1] = NULL;
+          filho->n_chaves--;
+          if(filho->n_chaves < index->ordem){
+            TNo *pai = le_no(index, no->end_pai);
+            TNo *temp;
+            int posicao_no_pai;
+            for(posicao_no_pai = 0; posicao_no_pai < pai->n_chaves + 1; posicao_no_pai++){
+                if(pai->end_filhos[posicao_no_pai] != -1){
+                    temp = le_no(index, pai->end_filhos[posicao_no_pai]);
+                    if(temp == no)
+                        break;
+                }
+            }
+            int end_adjacente, lado;
+            TNo *adjacente;
+            if(posicao_no_pai == 0){
+                adjacente = le_no(index, pai->end_filhos[posicao_no_pai+1]);
+                lado = 1;
+            }else{
+                adjacente = le_no(index, pai->end_filhos[posicao_no_pai-1]);
+                lado = 0;
+            }
+            if((adjacente->n_chaves + no->n_chaves) >= 2 * index->ordem){
+                redistribuicao(adjacente , pai, no, posicao_no_pai, no->end_pai, index, lado, end_filme, end_adjacente);}
+            else{
+                printf("Hello");
+                concatenacao(adjacente , pai, no, posicao_no_pai,no->end_pai,index, end_filme, end_adjacente);
+              }
+          }
+      }
+      return end_filme;
+    }
+}
+
+//Vai percorrer todo o arquivo buscando no por no pelo genero e excluindo
+void remove_genero(char *genero, Index *index){
+  FILE *arv = fopen(index->arvore, "rb");
+  int i = 0;
+  TNo *no_lido = le_no(index, i);
+  while(no_lido != NULL){
+    int j;
+    for(j=0; j<no_lido->n_chaves;j++){
+      if(strcmp(genero, no_lido->filmes[j]->genero)==0){
+        exclui(no_lido->filmes[j]->ano, no_lido->filmes[j]->titulo, index);
+      }
+    }
+    i++;
+    no_lido = le_no(index, i*tamanho_no(index->ordem));
+  }
+  libera_no(no_lido, index->ordem);
+  fclose(arv);
 }
