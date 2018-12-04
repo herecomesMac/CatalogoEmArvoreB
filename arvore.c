@@ -245,11 +245,9 @@ int insere_filme(Index *index, TMovie *filme) {
 
   // lê o nó naquela posição para a memória
   TNo *no = le_no(index, pos_no);
-  printf("n_chaves %d\n", no->n_chaves);
 
   // se tiver espaço, insere o filme e reescreve o nó
-  if(no->n_chaves <= (2*index->ordem)) {
-    printf("n chaves %d\n", no->n_chaves);
+  if(no->n_chaves < (2*index->ordem)) {
     return insere_simples(index, no, pos_no, filme);
   }
 
@@ -262,36 +260,30 @@ int insere_simples(Index* index, TNo* no, int pos, TMovie *filme) {
   // se nao tem filhos, só inserir chaves na posição certa
   char *chave = filme->chave;
   printf("end filho %d\n", no->end_filhos[0]);
-  if(no->end_filhos[0] == -1) {
-    printf("sem filhos\n");
 
-    // vou movendo as chaves para frente da última para a primeira paro na primeira chave
-    // que for menor que a minha
-    int i = no->n_chaves;
-    if (no->array_chaves[i]) {
-      while(i >= 0 && strcmp(no->array_chaves[i], filme->chave) > 0) {
-        no->array_chaves[i+1] = no->array_chaves[i];
-        no->filmes[i+1] = no->filmes[i];
-        i--;
-      }
+  // vou movendo as chaves para frente da última para a primeira paro na primeira chave
+  // que for menor que a minha
+  int i = no->n_chaves;
+  if (no->array_chaves[i]) {
+    while(i >= 0 && strcmp(no->array_chaves[i], filme->chave) > 0) {
+      no->array_chaves[i+1] = no->array_chaves[i];
+      no->filmes[i+1] = no->filmes[i];
+      i--;
     }
-
-    // agora que movi todas as chaves maiores pra frente, posso inserir
-    no->array_chaves[i] = filme->chave;
-    no->filmes[i] = filme;
-    no->n_chaves++;
-    index->qtd_filmes++;
-    printf("Filme: %s\n", no->array_chaves[i]);
-
-    salva_no(no, index, pos);
-    return 0;
   }
 
-  //se tiver filhos
-  return 1;
+  // agora que movi todas as chaves maiores pra frente, posso inserir
+  no->array_chaves[i] = filme->chave;
+  no->filmes[i] = filme;
+  no->n_chaves++;
+  index->qtd_filmes++;
+  printf("Filme: %s\n", no->array_chaves[i]);
+
+  salva_no(no, index, pos);
+  return 0;
 }
 
-int insere_com_distribuicao(Index* index, TNo* no, int pos, TMovie *filme) {
+int insere_com_distribuicao(Index* index, TNo* no_pai, int pos, TMovie *filme) {
   printf("insere_com_distribuicao\n");
 
   return 1;
